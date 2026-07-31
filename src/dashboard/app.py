@@ -1,5 +1,6 @@
 """
 Streamlit Decision Support Dashboard for EURUSD Agentic Causal Digital Twin.
+Customized for American International University - Bangladesh (AIUB) Thesis Presentation.
 Run with: streamlit run src/dashboard/app.py
 """
 import os
@@ -19,44 +20,109 @@ from src.safety.risk_engine import RiskEngine
 from src.config import PRIMARY_EXECUTION_SYMBOL, PRIMARY_TIMEFRAME
 
 st.set_page_config(
-    page_title="EURUSD Digital Twin Dashboard",
-    page_icon="📈",
+    page_title="AIUB Thesis - EURUSD Digital Twin",
+    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for modern dark aesthetics
+# Custom AIUB Branding CSS (Navy Blue #002147 & Gold #FDB813)
 st.markdown("""
 <style>
-    .main-header {
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Outfit', sans-serif;
+    }
+    
+    .aiub-header-container {
+        background: linear-gradient(135deg, #001F3F 0%, #003366 50%, #001122 100%);
+        border-bottom: 4px solid #FDB813;
+        border-radius: 12px;
+        padding: 24px 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .aiub-title {
         font-size: 2.2rem;
-        font-weight: 700;
-        background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        color: #FFFFFF;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+    .aiub-subtitle {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #FDB813;
+        margin-top: 6px;
         margin-bottom: 0px;
     }
-    .sub-header {
-        font-size: 1.1rem;
-        color: #A0AEC0;
-        margin-bottom: 20px;
+    .aiub-meta {
+        font-size: 0.9rem;
+        color: #CBD5E0;
+        margin-top: 10px;
+    }
+    .aiub-badge {
+        background-color: #FDB813;
+        color: #001F3F;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-right: 8px;
+    }
+    .metric-card {
+        background-color: #0D1B2A;
+        border: 1px solid #1B263B;
+        border-top: 3px solid #FDB813;
+        border-radius: 10px;
+        padding: 16px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Page Header
-st.markdown('<div class="main-header">Agentic Causal Digital Twin for EURUSD</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Regime-Aware Counterfactual Graph Learning & Multi-Objective RL Decision Support</div>', unsafe_allow_html=True)
+# AIUB Official Header Banner
+st.markdown("""
+<div class="aiub-header-container">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <div>
+                <span class="aiub-badge">AIUB Thesis Presentation</span>
+                <span class="aiub-badge" style="background-color: #0070F3; color: white;">XM MT5 Demo Support</span>
+            </div>
+            <h1 class="aiub-title">American International University - Bangladesh</h1>
+            <h3 class="aiub-subtitle">Agentic Causal Digital Twin for EURUSD: Regime-Aware Counterfactual Graph Learning & MORL</h3>
+            <div class="aiub-meta">
+                <b>Author</b>: Abdullah Al Muti &nbsp;|&nbsp; 
+                <b>Institution</b>: AIUB Department of Computer Science & Engineering &nbsp;|&nbsp; 
+                <b>Target</b>: EURUSD H4
+            </div>
+        </div>
+        <div style="text-align: right; background: rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(253,184,19,0.3);">
+            <div style="font-size: 1.8rem; font-weight: 800; color: #FDB813;">AIUB</div>
+            <div style="font-size: 0.75rem; color: #E2E8F0; text-transform: uppercase; letter-spacing: 1px;">Where Leaders Are Created</div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-# Sidebar System Status
-st.sidebar.image("https://img.icons8.com/color/96/000000/line-chart.png", width=64)
-st.sidebar.title("System Control")
+# Sidebar System Control
+st.sidebar.markdown("""
+<div style="text-align: center; padding: 10px; background-color: #001F3F; border-radius: 8px; border: 1px solid #FDB813; margin-bottom: 15px;">
+    <h3 style="color: #FDB813; margin:0;">AIUB Thesis</h3>
+    <p style="color: #E2E8F0; font-size: 0.8rem; margin:0;">Digital Twin Control Panel</p>
+</div>
+""", unsafe_allow_html=True)
 
+st.sidebar.title("System Controls")
 st.sidebar.markdown("---")
-st.sidebar.markdown("**System Safety Guard**: `ACTIVE`")
+st.sidebar.markdown("**Institution**: `AIUB`")
+st.sidebar.markdown("**System Guard**: `ACTIVE`")
 st.sidebar.markdown("**Trade Mode**: `0 (DEMO MODE VERIFIED)`")
-st.sidebar.markdown("**Order Send Permission**: `ALLOW_ORDER_SEND=false`")
-st.sidebar.markdown("**Target Instrument**: `EURUSD (H4)`")
+st.sidebar.markdown("**Order Send**: `ALLOW_ORDER_SEND=false`")
+st.sidebar.markdown("**Execution Target**: `EURUSD (H4)`")
 
 # Data Provider setup
 @st.cache_data
@@ -76,7 +142,7 @@ latest_regime_id = int(df_feats["dominant_regime"].iloc[-1]) if "dominant_regime
 latest_regime_label = REGIME_NAMES.get(latest_regime_id, "Low-Vol Consolidation")
 latest_regime_prob = float(df_feats[f"prob_regime_{latest_regime_id}"].iloc[-1]) if f"prob_regime_{latest_regime_id}" in df_feats.columns else 0.75
 
-# Main Dashboard Layout - 4 Key Metrics
+# Key Metric Cards
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -88,7 +154,7 @@ with col1:
 
 with col2:
     st.metric(
-        label="Decision Signal",
+        label="AI Decision Signal",
         value="BUY (+0.32)",
         delta="Confidence 68%"
     )
@@ -102,23 +168,41 @@ with col3:
 
 with col4:
     st.metric(
-        label="Proposed Position",
+        label="XM Lot Position",
         value="0.05 Lots",
         delta="Risk $13.50 (0.13%)"
     )
 
 st.markdown("---")
 
-# Tab Layout
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+# Main Navigation Tabs
+tab_overview, tab_signals, tab_regime, tab_cf, tab_bt, tab_risk = st.tabs([
+    "🎓 AIUB Thesis Overview",
     "📊 Decision Support & Signals",
-    "🧠 Market Regimes & Causal Graph",
-    "🔮 Counterfactual What-If Simulator",
-    "📈 Walk-Forward Backtest Performance",
-    "⚙️ Interactive Risk Calculator"
+    "🧠 Regimes & Causal Graph",
+    "🔮 Counterfactual Simulator",
+    "📈 Walk-Forward Backtest",
+    "⚙️ XM Risk Calculator"
 ])
 
-with tab1:
+with tab_overview:
+    st.subheader("Thesis Overview & Architecture Specification")
+    st.markdown("""
+    ### Project Summary
+    This research project presents an **Agentic Causal Digital Twin for EURUSD**, submitted as part of the thesis requirements at **American International University - Bangladesh (AIUB)**.
+    
+    #### Core Innovations:
+    1. **Target Lock**: Execution is strictly restricted to **`EURUSD` on completed H4 candles**.
+    2. **Multi-Instrument Causal Context**: Incorporates 15 macro & forex context instruments (`GBPUSD`, `USDJPY`, `USDCHF`, Gold `GOLD`, S&P 500 `US500Cash`) for graph discovery.
+    3. **Gaussian HMM Market Regimes**: Classifies market dynamics into 4 distinct regimes without forward lookahead bias.
+    4. **Tigramite PCMCI+ Causal Graph Learning**: Discovers time-lagged causal links ($\tau \in \{1, 2, 3, 4\}$) to build dynamic market graphs $G_t$.
+    5. **PyTorch Geometric GNN & MORL (PPO)**: Encodes graph attention embeddings and optimizes multi-objective rewards (Sharpe Ratio, Drawdown, Cost penalty).
+    6. **Verified XM Demo Guard**: Enforces `trade_mode == 0` (DEMO) and read-only execution (`ALLOW_ORDER_SEND=false`).
+    """)
+
+    st.info("🏫 **Institution**: American International University - Bangladesh (AIUB) | Department of Computer Science & Engineering")
+
+with tab_signals:
     c1, c2 = st.columns([2, 1])
     with c1:
         st.subheader("EURUSD H4 Price History & Technical Trend")
@@ -126,7 +210,7 @@ with tab1:
         st.caption(f"Last Completed Bar: {latest_time.strftime('%Y-%m-%d %H:%M:%S UTC')} | Completed Candles Only (No Lookahead)")
 
     with c2:
-        st.subheader("Decision Summary")
+        st.subheader("Decision Support Recommendation")
         st.info("""
         **Recommendation**: `BUY`  
         **Target Exposure**: `+0.32`  
@@ -137,8 +221,8 @@ with tab1:
         """)
         st.success("✅ DemoAccountGuard Verified: Account 1301884615 (XMGlobal-MT5 6)")
 
-with tab2:
-    st.subheader("Gaussian HMM Market Regime Probabilities & Causal Graph")
+with tab_regime:
+    st.subheader("Gaussian HMM Market Regimes & Tigramite PCMCI+ Causal Graph")
     col_reg1, col_reg2 = st.columns(2)
     with col_reg1:
         st.markdown("### Regime Posterior Probabilities")
@@ -155,7 +239,7 @@ with tab2:
         else:
             st.warning("Causal network plot not found. Run `causal-market-twin causal discover` to generate.")
 
-with tab3:
+with tab_cf:
     st.subheader("Counterfactual 'What-If' Market Scenario Simulator")
     st.markdown("Simulate market interventions $do(X_j = x_j')$ across context instruments to evaluate predicted EURUSD price impact:")
     
@@ -176,7 +260,7 @@ with tab3:
     m2.metric("Counterfactual EURUSD Return", f"{sim_res['counterfactual_eurusd_return']*100:.3f}%", delta=f"{sim_res['total_causal_impact']*100:.3f}% Impact")
     m3.metric("Stress Level", "MODERATE" if abs(sim_res['total_causal_impact']) < 0.005 else "HIGH")
 
-with tab4:
+with tab_bt:
     st.subheader("Walk-Forward Out-of-Sample Performance Benchmarks")
     bt_path = "artifacts/reports/backtest_results.json"
     plot_path_bt = "artifacts/reports/plots/equity_curves.png"
@@ -199,7 +283,7 @@ with tab4:
     else:
         st.info("Run `causal-market-twin backtest run` to generate walk-forward backtest results.")
 
-with tab5:
+with tab_risk:
     st.subheader("Interactive XM Risk Engine Position Sizer")
     col_a, col_b = st.columns(2)
     with col_a:
@@ -236,4 +320,4 @@ with tab5:
         st.success("✅ Valid XM Lot Proposal (Complies with volume_step 0.01 and margin checks)")
 
 st.markdown("---")
-st.caption("Agentic Causal Digital Twin for EURUSD | Powered by MetaTrader 5 & XM Broker")
+st.markdown("<div style='text-align: center; color: #718096; font-size: 0.85rem;'>American International University - Bangladesh (AIUB) Thesis Presentation | EURUSD Causal Digital Twin</div>", unsafe_allow_html=True)
