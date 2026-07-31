@@ -73,13 +73,6 @@ st.markdown("""
         display: inline-block;
         margin-right: 8px;
     }
-    .metric-card {
-        background-color: #0D1B2A;
-        border: 1px solid #1B263B;
-        border-top: 3px solid #FDB813;
-        border-radius: 10px;
-        padding: 16px;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -186,8 +179,8 @@ tab_overview, tab_signals, tab_regime, tab_cf, tab_bt, tab_risk = st.tabs([
 ])
 
 with tab_overview:
-    st.subheader("Thesis Overview & Architecture Specification")
-    st.markdown("""
+    st.subheader("Thesis Overview & System Architecture")
+    st.markdown(r"""
     ### Project Summary
     This research project presents an **Agentic Causal Digital Twin for EURUSD**, submitted as part of the thesis requirements at **American International University - Bangladesh (AIUB)**.
     
@@ -241,13 +234,13 @@ with tab_regime:
 
 with tab_cf:
     st.subheader("Counterfactual 'What-If' Market Scenario Simulator")
-    st.markdown("Simulate market interventions $do(X_j = x_j')$ across context instruments to evaluate predicted EURUSD price impact:")
+    st.markdown(r"Simulate market interventions $do(X_j = x_j')$ across context instruments to evaluate predicted EURUSD price impact:")
     
     sim = CounterfactualMarketSimulator()
     c_col1, c_col2 = st.columns(2)
     with c_col1:
         jpy_shock = st.slider("USDJPY Shock (%)", min_value=-3.0, max_value=3.0, value=1.0, step=0.1) / 100.0
-        gold_shock = st.slider("Gold (XAUUSD) Shock (%)", min_value=-3.0, max_value=3.0, value=-1.5, step=0.1) / 100.0
+        gold_shock = st.slider("Gold (XAUUSD) Shock (%)", min_value=-3.0, max_value=-1.5, value=-1.5, step=0.1) / 100.0
     with c_col2:
         spx_shock = st.slider("S&P 500 (US500) Shock (%)", min_value=-3.0, max_value=3.0, value=-2.0, step=0.1) / 100.0
 
