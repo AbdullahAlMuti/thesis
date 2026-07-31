@@ -1,0 +1,69 @@
+{
+  "timestamp_utc": "2026-07-31T23:18:04.076281+00:00",
+  "dataset_version": "v1.0.0",
+  "overall_status": "PASS",
+  "aligned_rows": 1000,
+  "aligned_path": "data\\interim\\aligned_h4\\v1.0.0\\aligned.parquet",
+  "quality_summary": {
+    "EURUSD": {
+      "is_valid_ohlc": true,
+      "ohlc_errors": [],
+      "total_rows": 1000,
+      "completed_rows": 1000,
+      "rejected_forming": 0,
+      "duplicates": 0,
+      "outliers_4sigma": 0,
+      "mean_spread_points": 16.932
+    },
+    "GBPUSD": {
+      "is_valid_ohlc": true,
+      "ohlc_errors": [],
+      "total_rows": 1000,
+      "completed_rows": 1000,
+      "rejected_forming": 0,
+      "duplicates": 0,
+      "outliers_4sigma": 0,
+      "mean_spread_points": 16.932
+    },
+    "USDJPY": {
+      "is_valid_ohlc": true,
+      "ohlc_errors": [],
+      "total_rows": 1000,
+      "completed_rows": 1000,
+      "rejected_forming": 0,
+      "duplicates": 0,
+      "outliers_4sigma": 0,
+      "mean_spread_points": 16.932
+    },
+    "USDCHF": {
+      "is_valid_ohlc": true,
+      "ohlc_errors": [],
+      "total_rows": 1000,
+      "completed_rows": 1000,
+      "rejected_forming": 0,
+      "duplicates": 0,
+      "outliers_4sigma": 0,
+      "mean_spread_points": 16.932
+    },
+    "XAUUSD": {
+      "is_valid_ohlc": true,
+      "ohlc_errors": [],
+      "total_rows": 1000,
+      "completed_rows": 1000,
+      "rejected_forming": 0,
+      "duplicates": 0,
+      "outliers_4sigma": 0,
+      "mean_spread_points": 16.932
+    },
+    "US500": {
+      "is_valid_ohlc": true,
+      "ohlc_errors": [],
+      "total_rows": 1000,
+      "completed_rows": 1000,
+      "rejected_forming": 0,
+      "duplicates": 0,
+      "outliers_4sigma": 0,
+      "mean_spread_points": 16.932
+    }
+  }
+}

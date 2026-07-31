@@ -1,0 +1,140 @@
+{
+  "timestamp_utc": "2026-07-31T23:17:21.969862+00:00",
+  "python_version": "3.13.4 (tags/v3.13.4:8a526ec, Jun  3 2025, 17:46:04) [MSC v.1943 64 bit (AMD64)]",
+  "packages": {
+    "MetaTrader5": {
+      "installed": true,
+      "version": "5.0.6070"
+    },
+    "numpy": {
+      "installed": true,
+      "version": "2.5.1"
+    },
+    "pandas": {
+      "installed": true,
+      "version": "2.3.3"
+    },
+    "pyarrow": {
+      "installed": true,
+      "version": "24.0.0"
+    },
+    "scipy": {
+      "installed": true,
+      "version": "1.18.0"
+    },
+    "sklearn": {
+      "installed": true,
+      "version": "1.9.0"
+    },
+    "statsmodels": {
+      "installed": true,
+      "version": "0.14.6"
+    },
+    "hmmlearn": {
+      "installed": true,
+      "version": "0.3.3"
+    },
+    "tigramite": {
+      "installed": true,
+      "version": "installed"
+    },
+    "xgboost": {
+      "installed": true,
+      "version": "3.3.0"
+    },
+    "torch": {
+      "installed": true,
+      "version": "2.13.0+cpu"
+    },
+    "torch_geometric": {
+      "installed": true,
+      "version": "2.8.0.post1"
+    },
+    "gymnasium": {
+      "installed": true,
+      "version": "1.3.0"
+    },
+    "stable_baselines3": {
+      "installed": true,
+      "version": "2.9.0"
+    },
+    "mo_gymnasium": {
+      "installed": true,
+      "version": "1.3.2"
+    },
+    "networkx": {
+      "installed": true,
+      "version": "3.6.1"
+    },
+    "mlflow": {
+      "installed": true,
+      "version": "3.15.0"
+    },
+    "streamlit": {
+      "installed": true,
+      "version": "1.60.0"
+    },
+    "morl_baselines": {
+      "installed": false,
+      "error": "morl_baselines pycddlib C-extension build constraint on Windows (gmp.h missing)",
+      "mitigation": "MO-Gymnasium vector rewards active; MORL algorithms interfaced natively."
+    }
+  },
+  "runtime_tests": {
+    "torch": {
+      "status": "PASS",
+      "matmul_shape": [
+        2,
+        4
+      ],
+      "cuda_available": false,
+      "device": "cpu",
+      "cuda_version": null
+    },
+    "torch_geometric": {
+      "status": "PASS",
+      "gatv2_out_shape": [
+        2,
+        2
+      ]
+    },
+    "hmmlearn": {
+      "status": "PASS",
+      "n_components": 2,
+      "sample_probs_shape": [
+        5,
+        2
+      ]
+    },
+    "tigramite": {
+      "status": "PASS",
+      "val_matrix_shape": [
+        3,
+        3,
+        3
+      ],
+      "p_matrix_shape": [
+        3,
+        3,
+        3
+      ]
+    },
+    "gymnasium": {
+      "status": "PASS",
+      "env_check": "PASSED"
+    },
+    "stable_baselines3": {
+      "status": "PASS",
+      "trained_steps": 128,
+      "predicted_action": -0.32808995246887207
+    },
+    "mo_gymnasium": {
+      "status": "PASS",
+      "reward_dim": 3,
+      "obs_shape": [
+        7
+      ]
+    }
+  },
+  "status": "PASS"
+}

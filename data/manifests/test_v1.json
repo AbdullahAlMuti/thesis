@@ -1,0 +1,18 @@
+{
+  "dataset_version": "test_v1",
+  "created_at_utc": "2026-07-31T23:15:50.748314+00:00",
+  "primary_target": "EURUSD",
+  "symbol_count": 1,
+  "total_rows": 50,
+  "git_commit_hash": "uncommitted_scaffold",
+  "python_version": "3.13.4",
+  "symbols_summary": {
+    "EURUSD": {
+      "file_path": "data\\raw\\mt5\\h4\\EURUSD\\test_v1\\bars.parquet",
+      "row_count": 50,
+      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
+      "last_timestamp_utc": "2023-01-09T04:00:00+00:00",
+      "sha256": "087d5875fa9ac42466c7d19445fb1989fe93fe60f3daaf7bf37f4e756cb545f5"
+    }
+  }
+}

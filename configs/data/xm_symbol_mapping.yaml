@@ -1,0 +1,96 @@
+AUDUSD:
+  broker_symbol: AUDUSD
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+EURCHF:
+  broker_symbol: EURCHF
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+EURGBP:
+  broker_symbol: EURGBP
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+EURJPY:
+  broker_symbol: EURJPY
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+EURUSD:
+  broker_symbol: EURUSD
+  confidence: 1.0
+  enabled: true
+  role: target
+  source: offline_default
+GBPUSD:
+  broker_symbol: GBPUSD
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+GER40:
+  broker_symbol: GER40
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+OIL:
+  broker_symbol: OIL
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+UK100:
+  broker_symbol: UK100
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+US100:
+  broker_symbol: US100
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+US30:
+  broker_symbol: US30
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+US500:
+  broker_symbol: US500
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+USDCAD:
+  broker_symbol: USDCAD
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+USDCHF:
+  broker_symbol: USDCHF
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+USDJPY:
+  broker_symbol: USDJPY
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
+XAUUSD:
+  broker_symbol: XAUUSD
+  confidence: 0.95
+  enabled: true
+  role: context
+  source: offline_default
