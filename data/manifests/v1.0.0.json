@@ -1,10 +1,10 @@
 {
   "dataset_version": "v1.0.0",
-  "created_at_utc": "2026-07-31T23:18:04.030245+00:00",
+  "created_at_utc": "2026-07-31T23:30:31.882561+00:00",
   "primary_target": "EURUSD",
   "symbol_count": 6,
   "total_rows": 6000,
-  "git_commit_hash": "uncommitted_scaffold",
+  "git_commit_hash": "75c5924dba9672f5c3ac770b54d83a48c492e85d",
   "python_version": "3.13.4",
   "symbols_summary": {
     "EURUSD": {
@@ -12,42 +12,42 @@
       "row_count": 1000,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "20d8096845fe1e58d45c7296c8a7d26a1d45e2aa1bee2c097ec29b68a4df8e85"
+      "sha256": "12326b27cd59adb360bf3db0ce3134eea421cb07bb444947715329562f50555b"
     },
     "GBPUSD": {
       "file_path": "data\\raw\\mt5\\h4\\GBPUSD\\v1.0.0\\bars.parquet",
       "row_count": 1000,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "839a9b52d2a6f73d5ab73f8bc2035f43fa580b23a0a281e0a60fd6b74217848f"
+      "sha256": "b415ad4b535c749b5c4c7a76d77cdc339a8cfe1b9b4d8127a781c4a19455a23c"
     },
     "USDJPY": {
       "file_path": "data\\raw\\mt5\\h4\\USDJPY\\v1.0.0\\bars.parquet",
       "row_count": 1000,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "dcaa9f99c2c0852a7f0b7f6f0bc26ba4166801ebaef31596c57e2660ddb6122f"
+      "sha256": "74c4c6476ed73689cc1a641ee2a0ea2facdf5b771c0e7339bcfb2948cf5ae468"
     },
     "USDCHF": {
       "file_path": "data\\raw\\mt5\\h4\\USDCHF\\v1.0.0\\bars.parquet",
       "row_count": 1000,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "4cecc6aef13c4b3443484a0f2eee974afc582754860b074fd24bd70cce5d97ce"
+      "sha256": "6a58496dff174daed05a7439e9cdb21593d40c3d1a03c0f46aafceb7561be885"
     },
     "XAUUSD": {
       "file_path": "data\\raw\\mt5\\h4\\XAUUSD\\v1.0.0\\bars.parquet",
       "row_count": 1000,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "eeb2d5fd74e798fca0a3c0f53e399ed45831061a087329816914c56e3a7a662a"
+      "sha256": "9fe03e96c3028adf6d5d765d9b7ae31a8f389cfeda8dda3590bcbb2d9548b0e6"
     },
     "US500": {
       "file_path": "data\\raw\\mt5\\h4\\US500\\v1.0.0\\bars.parquet",
       "row_count": 1000,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "fb6aa3ac27e65f1adcbeb89037eca51421b2007117b65d5b1dd46a9d7278de59"
+      "sha256": "8d1e87542a726c06d930d9820494acd0f43fee4ecebcfcf7fed776fed9f6bd0d"
     }
   }
 }

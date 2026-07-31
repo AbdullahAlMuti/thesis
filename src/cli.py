@@ -92,8 +92,13 @@ def main():
 
             elif args.command == "download-h4":
                 logger.info("Executing CLI command: mt5 download-h4")
-                from scripts.validate_market_data import run_data_quality_checks
-                run_data_quality_checks()
+                try:
+                    from scripts.download_live_mt5_history import download_live_history
+                    download_live_history()
+                except Exception as e:
+                    logger.warning(f"Live MT5 download fallback to offline suite: {e}")
+                    from scripts.validate_market_data import run_data_quality_checks
+                    run_data_quality_checks()
 
         elif args.group == "data":
             if args.command in ("validate", "align", "manifest", "report"):

@@ -1,96 +1,320 @@
 AUDUSD:
   broker_symbol: AUDUSD
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: AUD
+  currency_profit: USD
+  description: Australian Dollar vs US Dollar
+  digits: 5
   enabled: true
+  generic_symbol: AUDUSD
+  point: 1.0e-05
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 62.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 1.0
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 EURCHF:
   broker_symbol: EURCHF
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: EUR
+  currency_profit: CHF
+  description: Euro vs Swiss Franc
+  digits: 5
   enabled: true
+  generic_symbol: EURCHF
+  point: 1.0e-05
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 70.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 1.238022135835789
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 EURGBP:
   broker_symbol: EURGBP
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: EUR
+  currency_profit: GBP
+  description: Euro vs Great Britain Pound
+  digits: 5
   enabled: true
+  generic_symbol: EURGBP
+  point: 1.0e-05
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 42.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 1.3477200000000003
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 EURJPY:
   broker_symbol: EURJPY
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: EUR
+  currency_profit: JPY
+  description: Euro vs Japanese Yen
+  digits: 3
   enabled: true
+  generic_symbol: EURJPY
+  point: 0.001
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 107.0
+  stops_level: 10
+  tick_size: 0.001
+  tick_value: 0.634606353678813
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 EURUSD:
   broker_symbol: EURUSD
   confidence: 1.0
+  contract_size: 100000.0
+  currency_base: EUR
+  currency_profit: USD
+  description: Euro vs US Dollar
+  digits: 5
   enabled: true
+  generic_symbol: EURUSD
+  point: 1.0e-05
   role: target
-  source: offline_default
+  source: exact_match
+  spread: 73.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 1.0
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 GBPUSD:
   broker_symbol: GBPUSD
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: GBP
+  currency_profit: USD
+  description: Great Britain Pound vs US Dollar
+  digits: 5
   enabled: true
+  generic_symbol: GBPUSD
+  point: 1.0e-05
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 78.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 1.0
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 GER40:
-  broker_symbol: GER40
+  broker_symbol: GER40Cash
   confidence: 0.95
+  contract_size: 1.0
+  currency_base: EUR
+  currency_profit: EUR
+  description: Germany 40 Index Cash
+  digits: 2
   enabled: true
+  generic_symbol: GER40
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 0.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 0.01
+  volume_max: 150.0
+  volume_min: 0.1
+  volume_step: 0.1
 OIL:
-  broker_symbol: OIL
+  broker_symbol: OILCash
   confidence: 0.95
+  contract_size: 100.0
+  currency_base: USD
+  currency_profit: USD
+  description: WTI Oil Cash
+  digits: 2
   enabled: true
+  generic_symbol: OIL
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 0.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 1.0
+  volume_max: 420.0
+  volume_min: 0.01
+  volume_step: 0.01
 UK100:
-  broker_symbol: UK100
+  broker_symbol: UK100Cash
   confidence: 0.95
+  contract_size: 1.0
+  currency_base: GBP
+  currency_profit: GBP
+  description: UK 100 Index Cash
+  digits: 2
   enabled: true
+  generic_symbol: UK100
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 0.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 0.01
+  volume_max: 180.0
+  volume_min: 0.1
+  volume_step: 0.1
 US100:
-  broker_symbol: US100
+  broker_symbol: US100Cash
   confidence: 0.95
+  contract_size: 1.0
+  currency_base: USD
+  currency_profit: USD
+  description: US 100 Index Cash
+  digits: 2
   enabled: true
+  generic_symbol: US100
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 0.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 0.01
+  volume_max: 240.0
+  volume_min: 0.1
+  volume_step: 0.1
 US30:
-  broker_symbol: US30
+  broker_symbol: US30Cash
   confidence: 0.95
+  contract_size: 1.0
+  currency_base: USD
+  currency_profit: USD
+  description: Wall Street 30 Index Cash
+  digits: 2
   enabled: true
+  generic_symbol: US30
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 0.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 0.01
+  volume_max: 180.0
+  volume_min: 0.1
+  volume_step: 0.1
 US500:
-  broker_symbol: US500
+  broker_symbol: US500Cash
   confidence: 0.95
+  contract_size: 1.0
+  currency_base: USD
+  currency_profit: USD
+  description: US 500 Index Cash
+  digits: 2
   enabled: true
+  generic_symbol: US500
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 0.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 0.01
+  volume_max: 870.0
+  volume_min: 0.1
+  volume_step: 0.1
 USDCAD:
   broker_symbol: USDCAD
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: USD
+  currency_profit: CAD
+  description: US Dollar vs Canadian Dollar
+  digits: 5
   enabled: true
+  generic_symbol: USDCAD
+  point: 1.0e-05
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 61.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 0.7134245089855819
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 USDCHF:
   broker_symbol: USDCHF
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: USD
+  currency_profit: CHF
+  description: US Dollar vs Swiss Franc
+  digits: 5
   enabled: true
+  generic_symbol: USDCHF
+  point: 1.0e-05
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 64.0
+  stops_level: 10
+  tick_size: 1.0e-05
+  tick_value: 1.238022135835789
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 USDJPY:
   broker_symbol: USDJPY
-  confidence: 0.95
+  confidence: 1.0
+  contract_size: 100000.0
+  currency_base: USD
+  currency_profit: JPY
+  description: US Dollar vs Japanese Yen
+  digits: 3
   enabled: true
+  generic_symbol: USDJPY
+  point: 0.001
   role: context
-  source: offline_default
+  source: exact_match
+  spread: 49.0
+  stops_level: 10
+  tick_size: 0.001
+  tick_value: 0.634606353678813
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01
 XAUUSD:
-  broker_symbol: XAUUSD
+  broker_symbol: GOLD
   confidence: 0.95
+  contract_size: 100.0
+  currency_base: USD
+  currency_profit: USD
+  description: GOLD
+  digits: 2
   enabled: true
+  generic_symbol: XAUUSD
+  point: 0.01
   role: context
-  source: offline_default
+  source: equivalent_match
+  spread: 165.0
+  stops_level: 10
+  tick_size: 0.01
+  tick_value: 1.0
+  volume_max: 50.0
+  volume_min: 0.01
+  volume_step: 0.01

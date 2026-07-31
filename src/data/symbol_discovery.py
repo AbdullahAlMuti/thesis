@@ -1,185 +1,169 @@
 """
-Dynamic Broker Symbol Discovery for XM MetaTrader 5 Terminal.
-Resolves and ranks symbol name variations (e.g. EURUSD, EURUSD., EURUSD#, EURUSDm) dynamically.
-Exports YAML configuration to configs/data/xm_symbol_mapping.yaml and JSON report to artifacts/reports/symbol_discovery.json.
+Dynamic Symbol Discovery Engine for MetaTrader 5 (XM Broker Compatible).
+Resolves EURUSD target symbol and context universe symbols dynamically.
 """
 import os
+import yaml
 import json
 import logging
-import yaml
 from dataclasses import dataclass, asdict
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Tuple, Any
+
+from src.config import PRIMARY_EXECUTION_SYMBOL, FOREX_CONTEXT_SYMBOLS, RISK_CONTEXT_SYMBOLS, SYMBOL_SUFFIX_CANDIDATES
 
 logger = logging.getLogger(__name__)
 
 @dataclass
-class SymbolMappingRecord:
+class SymbolMetadata:
     generic_symbol: str
     broker_symbol: str
     confidence: float
     source: str
     enabled: bool
-    role: str  # target or context
-    digits: int
-    point: float
-    tick_size: float
-    tick_value: float
-    volume_min: float
-    volume_max: float
-    volume_step: float
-    stops_level: int
-    spread: int
-    currency_base: str
-    currency_profit: str
-    trade_contract_size: float
+    role: str
+    description: str = ""
+    currency_base: str = ""
+    currency_profit: str = ""
+    digits: int = 5
+    point: float = 0.00001
+    tick_size: float = 0.00001
+    tick_value: float = 1.0
+    volume_min: float = 0.01
+    volume_max: float = 100.0
+    volume_step: float = 0.01
+    stops_level: int = 10
+    spread: float = 15.0
+    contract_size: float = 100000.0
 
 
 class SymbolResolver:
     """
-    Resolves broker-specific symbol names dynamically via MT5 API or mock symbol dictionary.
+    Dynamic broker symbol resolver supporting XM MT5 terminal symbol mapping.
     """
+
+    DEFAULT_KNOWN_EQUIVALENTS = {
+        "XAUUSD": ["GOLD", "XAUUSD", "GOLD.m", "XAUUSD.m"],
+        "US500": ["US500Cash", "US500", "SPX500", "US500.Cash"],
+        "US100": ["US100Cash", "US100", "NAS100", "US100.Cash"],
+        "US30": ["US30Cash", "US30", "DJ30", "US30.Cash"],
+        "GER40": ["GER40Cash", "GER40", "DAX40", "GER40.Cash"],
+        "UK100": ["UK100Cash", "UK100", "FTSE100", "UK100.Cash"],
+        "OIL": ["OILCash", "OIL", "WTI", "USOIL", "OIL.Cash"]
+    }
 
     def __init__(self, mt5_interface: Optional[Any] = None):
         self.mt5 = mt5_interface
-        self.resolved_records: Dict[str, SymbolMappingRecord] = {}
-        self.unavailable_symbols: List[str] = []
+        self.resolved_symbols: Dict[str, SymbolMetadata] = {}
 
-    def discover_symbol(
-        self,
-        base_symbol: str,
-        candidate_suffixes: List[str],
-        role: str = "context"
-    ) -> Optional[SymbolMappingRecord]:
+    def discover_symbol(self, base_symbol: str, candidate_suffixes: List[str], role: str) -> Optional[SymbolMetadata]:
         """
-        Tries exact base symbol, case-insensitive match, and candidate suffixes against MT5.
+        Discovers broker symbol for a generic base symbol using candidate search hierarchy.
         """
+        # If offline or MT5 interface not active, return standard mock resolution
         if self.mt5 is None:
-            # Offline mode mock record
-            record = SymbolMappingRecord(
+            return SymbolMetadata(
                 generic_symbol=base_symbol,
                 broker_symbol=base_symbol,
-                confidence=1.0 if role == "target" else 0.95,
+                confidence=1.0,
                 source="offline_default",
                 enabled=True,
                 role=role,
-                digits=5 if "JPY" not in base_symbol else 3,
-                point=0.00001 if "JPY" not in base_symbol else 0.001,
-                tick_size=0.00001 if "JPY" not in base_symbol else 0.001,
-                tick_value=1.0,
-                volume_min=0.01,
-                volume_max=100.0,
-                volume_step=0.01,
-                stops_level=10,
-                spread=15,
-                currency_base=base_symbol[:3] if len(base_symbol) >= 6 else "USD",
-                currency_profit=base_symbol[3:6] if len(base_symbol) >= 6 else "USD",
-                trade_contract_size=100000.0 if len(base_symbol) == 6 else 100.0
+                description=f"Offline default for {base_symbol}"
             )
-            self.resolved_records[base_symbol] = record
-            return record
 
-        # Live/Connected MT5 resolution
-        candidates = [
-            (base_symbol, 1.0, "exact_match"),
-            (base_symbol.lower(), 0.98, "case_insensitive_match")
-        ]
+        # Build candidate list
+        candidates = []
+        if base_symbol in self.DEFAULT_KNOWN_EQUIVALENTS:
+            candidates.extend(self.DEFAULT_KNOWN_EQUIVALENTS[base_symbol])
+        
+        candidates.append(base_symbol)
         for suf in candidate_suffixes:
-            if suf:
-                candidates.append((f"{base_symbol}{suf}", 0.92, f"suffix_match_{suf}"))
+            candidates.append(f"{base_symbol}{suf}")
 
-        for cand, conf, src in candidates:
+        for cand in candidates:
             info = self.mt5.symbol_info(cand)
             if info is not None:
-                if not info.select:
-                    self.mt5.symbol_select(cand, True)
-
-                _tick_info = self.mt5.symbol_info_tick(cand)
                 tick_value = getattr(info, "trade_tick_value", 1.0)
                 tick_size = getattr(info, "trade_tick_size", info.point)
 
-                record = SymbolMappingRecord(
+                meta = SymbolMetadata(
                     generic_symbol=base_symbol,
-                    broker_symbol=cand,
-                    confidence=conf,
-                    source=src,
+                    broker_symbol=info.name,
+                    confidence=1.0 if info.name == base_symbol else 0.95,
+                    source="exact_match" if info.name == base_symbol else "equivalent_match",
                     enabled=True,
                     role=role,
-                    digits=info.digits,
-                    point=info.point,
+                    description=getattr(info, "description", ""),
+                    currency_base=getattr(info, "currency_base", ""),
+                    currency_profit=getattr(info, "currency_profit", ""),
+                    digits=getattr(info, "digits", 5),
+                    point=getattr(info, "point", 0.00001),
                     tick_size=tick_size,
                     tick_value=tick_value,
-                    volume_min=info.volume_min,
-                    volume_max=info.volume_max,
-                    volume_step=info.volume_step,
-                    stops_level=getattr(info, "trade_stops_level", 0),
-                    spread=info.spread,
-                    currency_base=info.currency_base,
-                    currency_profit=info.currency_profit,
-                    trade_contract_size=info.trade_contract_size
+                    volume_min=getattr(info, "volume_min", 0.01),
+                    volume_max=getattr(info, "volume_max", 100.0),
+                    volume_step=getattr(info, "volume_step", 0.01),
+                    stops_level=getattr(info, "stops_level", 10),
+                    spread=float(getattr(info, "spread", 15)),
+                    contract_size=getattr(info, "trade_contract_size", 100000.0)
                 )
-                self.resolved_records[base_symbol] = record
-                logger.info(f"Discovered {base_symbol} -> XM Broker Symbol: '{cand}' (Conf: {conf})")
-                return record
+                logger.info(f"Discovered {base_symbol} -> XM Broker Symbol: '{info.name}' (Conf: {meta.confidence})")
+                return meta
 
         logger.warning(f"Could not discover broker symbol for base: '{base_symbol}'")
-        self.unavailable_symbols.append(base_symbol)
         return None
 
     def resolve_dataset_universe(
         self,
-        primary_symbol: str,
-        forex_context: List[str],
-        risk_context: List[str],
-        candidate_suffixes: List[str]
+        primary_symbol: str = PRIMARY_EXECUTION_SYMBOL,
+        forex_context: List[str] = FOREX_CONTEXT_SYMBOLS,
+        risk_context: List[str] = RISK_CONTEXT_SYMBOLS,
+        candidate_suffixes: List[str] = SYMBOL_SUFFIX_CANDIDATES
     ) -> Dict[str, Any]:
         """
-        Scans all primary and contextual symbols and exports YAML & JSON artifacts.
+        Resolves primary target and context symbol universe.
         """
-        self.resolved_records.clear()
-        self.unavailable_symbols.clear()
+        self.resolved_symbols.clear()
 
-        # 1. Target symbol EURUSD first
-        self.discover_symbol(primary_symbol, candidate_suffixes, role="target")
+        # Primary execution target
+        primary_meta = self.discover_symbol(primary_symbol, candidate_suffixes, role="target")
+        if primary_meta:
+            self.resolved_symbols[primary_symbol] = primary_meta
 
-        # 2. Forex context
-        for fx in forex_context:
-            self.discover_symbol(fx, candidate_suffixes, role="context")
+        # Forex context symbols
+        for sym in forex_context:
+            meta = self.discover_symbol(sym, candidate_suffixes, role="context")
+            if meta:
+                self.resolved_symbols[sym] = meta
 
-        # 3. Risk context
-        for rk in risk_context:
-            self.discover_symbol(rk, candidate_suffixes, role="context")
+        # Risk context symbols
+        for sym in risk_context:
+            meta = self.discover_symbol(sym, candidate_suffixes, role="context")
+            if meta:
+                self.resolved_symbols[sym] = meta
 
-        # Export YAML config
-        os.makedirs("configs/data", exist_ok=True)
-        yaml_path = "configs/data/xm_symbol_mapping.yaml"
-        yaml_dict = {}
-        for gen_sym, rec in self.resolved_records.items():
-            yaml_dict[gen_sym] = {
-                "broker_symbol": rec.broker_symbol,
-                "confidence": rec.confidence,
-                "source": rec.source,
-                "enabled": rec.enabled,
-                "role": rec.role
-            }
-
-        with open(yaml_path, "w", encoding="utf-8") as f:
-            yaml.dump(yaml_dict, f, default_flow_style=False)
-
-        # Export JSON report
-        os.makedirs("artifacts/reports", exist_ok=True)
-        json_path = "artifacts/reports/symbol_discovery.json"
-        json_dict = {
+        return {
             "primary_target": primary_symbol,
-            "total_resolved": len(self.resolved_records),
-            "total_unavailable": len(self.unavailable_symbols),
-            "unavailable_symbols": self.unavailable_symbols,
-            "resolved_symbols": {k: asdict(v) for k, v in self.resolved_records.items()}
+            "total_resolved": len(self.resolved_symbols),
+            "resolved_symbols": {k: asdict(v) for k, v in self.resolved_symbols.items()}
         }
-        with open(json_path, "w", encoding="utf-8") as f:
-            json.dump(json_dict, f, indent=2)
 
-        logger.info(
-            f"Symbol Discovery Complete. Total Resolved: {len(self.resolved_records)}, "
-            f"Unavailable: {len(self.unavailable_symbols)}"
-        )
-        return json_dict
+    def export_mapping_yaml(self, filepath: str = "configs/data/xm_symbol_mapping.yaml"):
+        """Exports YAML symbol mapping."""
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        data = {k: asdict(v) for k, v in self.resolved_symbols.items()}
+        with open(filepath, "w", encoding="utf-8") as f:
+            yaml.dump(data, f, default_flow_style=False)
+        logger.info(f"Exported XM symbol mapping to '{filepath}'")
+
+    def export_report_json(self, filepath: str = "artifacts/reports/symbol_discovery.json"):
+        """Exports JSON discovery report."""
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        data = {
+            "primary_target": PRIMARY_EXECUTION_SYMBOL,
+            "total_resolved": len(self.resolved_symbols),
+            "symbols": {k: asdict(v) for k, v in self.resolved_symbols.items()}
+        }
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+        logger.info(f"Exported symbol discovery report to '{filepath}'")
