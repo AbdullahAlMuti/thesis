@@ -11,6 +11,8 @@ import streamlit as st
 from src.safety.demo_guard import DemoAccountGuard
 from src.data.symbol_discovery import SymbolResolver
 from src.data.offline_provider import OfflineDataProvider
+from src.models.regime_hmm import MarketRegimeHMM, REGIME_NAMES
+from src.data.features import FeatureEngineeringPipeline
 from src.safety.risk_engine import RiskEngine
 from src.config import PRIMARY_EXECUTION_SYMBOL, PRIMARY_TIMEFRAME
 
@@ -37,27 +39,12 @@ st.markdown("""
         color: #A0AEC0;
         margin-bottom: 20px;
     }
-    .metric-card {
-        background-color: #1A202C;
-        border: 1px solid #2D3748;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    .status-badge {
-        background-color: #276749;
-        color: #9AE6B4;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
 </style>
 """, unsafe_allow_html=True)
 
 # Page Header
 st.markdown('<div class="main-header">Agentic Causal Digital Twin for EURUSD</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Real-Time Regime-Aware Decision Support System for XM MetaTrader 5</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Regime-Aware Counterfactual Graph Learning & Decision Support for XM MetaTrader 5</div>', unsafe_allow_html=True)
 
 # Sidebar System Status
 st.sidebar.image("https://img.icons8.com/color/96/000000/line-chart.png", width=64)
@@ -74,14 +61,20 @@ st.sidebar.markdown("**Target Instrument**: `EURUSD (H4)`")
 def load_market_data():
     provider = OfflineDataProvider()
     df = provider.generate_synthetic_ohlcv(symbol="EURUSD", num_bars=1000)
-    return df
+    pipeline = FeatureEngineeringPipeline()
+    feats = pipeline.build_feature_matrix(df, fit_hmm=True)
+    return df, feats
 
-df_eurusd = load_market_data()
+df_eurusd, df_feats = load_market_data()
 latest_close = df_eurusd["close"].iloc[-1]
 latest_time = df_eurusd.index[-1]
 ret_1b = np.log(df_eurusd["close"] / df_eurusd["close"].shift(1)).iloc[-1]
 
-# Main Dashboard Layout - 3 Key Metrics
+latest_regime_id = int(df_feats["dominant_regime"].iloc[-1]) if "dominant_regime" in df_feats.columns else 0
+latest_regime_label = REGIME_NAMES.get(latest_regime_id, "Low-Vol Consolidation")
+latest_regime_prob = float(df_feats[f"prob_regime_{latest_regime_id}"].iloc[-1]) if f"prob_regime_{latest_regime_id}" in df_feats.columns else 0.75
+
+# Main Dashboard Layout - 4 Key Metrics
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -101,8 +94,8 @@ with col2:
 with col3:
     st.metric(
         label="Market Regime (HMM)",
-        value="Bullish Trend",
-        delta="Probability 74%"
+        value=latest_regime_label,
+        delta=f"Prob {latest_regime_prob*100:.1f}%"
     )
 
 with col4:
@@ -115,15 +108,14 @@ with col4:
 st.markdown("---")
 
 # Tab Layout
-tab1, tab2, tab3 = st.tabs(["📊 Decision Support & Charts", "⚙️ Interactive Risk Calculator", "🔍 Data Quality & Manifest Inspector"])
+tab1, tab2, tab3, tab4 = st.tabs(["📊 Decision Support & Charts", "🧠 Market Regimes & Causal Graph", "⚙️ Interactive Risk Calculator", "🔍 Data Quality & Manifest Inspector"])
 
 with tab1:
     c1, c2 = st.columns([2, 1])
 
     with c1:
-        st.subheader("EURUSD H4 Price History & Signal Overlay")
-        st.line_chart(df_eurusd[["close"]].tail(200))
-        
+        st.subheader("EURUSD H4 Price History & Feature Trends")
+        st.line_chart(df_feats[["eurusd_close", "rsi_14"]].tail(200))
         st.caption(f"Last Completed Bar: {latest_time.strftime('%Y-%m-%d %H:%M:%S UTC')} | Completed Candles Only (No Lookahead)")
 
     with c2:
@@ -136,14 +128,31 @@ with tab1:
         **Spread**: `14.0 points` (Threshold: `35.0`)  
         **Execution Symbol**: `EURUSD`  
         """)
-        
         st.success("✅ DemoAccountGuard Verified: Account 1301884615 (XMGlobal-MT5 6)")
 
 with tab2:
+    st.subheader("Gaussian HMM Market Regime Probabilities & Causal Graph")
+    
+    col_reg1, col_reg2 = st.columns(2)
+    with col_reg1:
+        st.markdown("### Regime Posterior Probabilities")
+        regime_cols = [c for c in df_feats.columns if c.startswith("prob_regime_")]
+        if regime_cols:
+            st.area_chart(df_feats[regime_cols].tail(150))
+        st.caption("Gaussian HMM filtered state probabilities P(S_t = k | F_t)")
+
+    with col_reg2:
+        st.markdown("### Tigramite PCMCI+ Causal Graph Network")
+        plot_path = "artifacts/reports/plots/causal_network.png"
+        if os.path.exists(plot_path):
+            st.image(plot_path, caption="Discovered Causal Links to EURUSD Across Context Universe")
+        else:
+            st.warning("Causal network plot not found. Run `causal-market-twin causal discover` to generate.")
+
+with tab3:
     st.subheader("Interactive XM Risk Engine Position Sizer")
     
     col_a, col_b = st.columns(2)
-    
     with col_a:
         action_val = st.slider("Continuous Model Action [-1.0 to +1.0]", min_value=-1.0, max_value=1.0, value=0.5, step=0.05)
         equity_val = st.number_input("Account Equity ($)", value=10000.0, step=500.0)
@@ -177,16 +186,13 @@ with tab2:
     else:
         st.success("✅ Valid XM Lot Proposal (Complies with volume_step 0.01 and margin checks)")
 
-with tab3:
-    st.subheader("Dataset Manifest & Data Quality Audit")
-    
+with tab4:
+    st.subheader("Dataset Manifest & Feature Store Inspector")
     manifest_path = "data/manifests/v1.0.0.json"
     if os.path.exists(manifest_path):
         with open(manifest_path, "r", encoding="utf-8") as f:
             manifest_data = json.load(f)
         st.json(manifest_data)
-    else:
-        st.warning("Manifest file not found. Run `causal-market-twin data manifest` to generate.")
 
 st.markdown("---")
 st.caption("Agentic Causal Digital Twin for EURUSD | Powered by MetaTrader 5 & XM Broker")

@@ -1,0 +1,10 @@
+{
+  "var_names": [
+    "EURUSD",
+    "GBPUSD"
+  ],
+  "tau_max": 4,
+  "alpha_level": 0.05,
+  "total_links_found": 0,
+  "significant_links": []
+}

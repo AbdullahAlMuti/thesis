@@ -1,13 +1,20 @@
 """
 Unified Command Line Interface for Causal Market Twin.
-Supports all Phase 2 audit, data pipeline, symbol discovery, and risk verification CLI commands.
+Supports all Phase 2 & Phase 3 CLI commands.
 """
 import sys
+import os
 import argparse
 import logging
+import pandas as pd
 
 from src.safety.demo_guard import DemoAccountGuard
 from src.data.symbol_discovery import SymbolResolver
+from src.data.pipeline import DataPipelineManager
+from src.data.quality import DataQualityValidator
+from src.data.features import FeatureEngineeringPipeline
+from src.models.regime_hmm import MarketRegimeHMM
+from src.models.causal_discovery import CausalGraphDiscoverer
 from src.safety.risk_engine import RiskEngine
 from src.config import PRIMARY_EXECUTION_SYMBOL, FOREX_CONTEXT_SYMBOLS, RISK_CONTEXT_SYMBOLS, SYMBOL_SUFFIX_CANDIDATES
 
@@ -37,6 +44,17 @@ def build_parser() -> argparse.ArgumentParser:
     data_sub.add_parser("align", help="Align context dataset anchored on EURUSD timeline")
     data_sub.add_parser("manifest", help="Generate dataset manifest and hashes")
     data_sub.add_parser("report", help="Generate comprehensive dataset report")
+    data_sub.add_parser("build-features", help="Build leakage-safe feature store")
+
+    # regime group
+    regime_parser = subparsers.add_parser("regime", help="HMM regime classification operations")
+    regime_sub = regime_parser.add_subparsers(dest="command", help="Regime subcommands")
+    regime_sub.add_parser("train", help="Train Gaussian HMM market regime classifier")
+
+    # causal group
+    causal_parser = subparsers.add_parser("causal", help="PCMCI+ Causal graph discovery operations")
+    causal_sub = causal_parser.add_subparsers(dest="command", help="Causal subcommands")
+    causal_sub.add_parser("discover", help="Discover time-lagged causal graph across context universe")
 
     # risk group
     risk_parser = subparsers.add_parser("risk", help="Risk engine verification")
@@ -69,7 +87,6 @@ def main():
         elif args.group == "mt5":
             if args.command == "connect-test":
                 logger.info("Executing CLI command: mt5 connect-test")
-                # Attempt connection check
                 try:
                     from src.data.mt5_provider import MT5DataProvider
                     provider = MT5DataProvider()
@@ -105,6 +122,42 @@ def main():
                 logger.info(f"Executing CLI command: data {args.command}")
                 from scripts.validate_market_data import run_data_quality_checks
                 run_data_quality_checks()
+
+            elif args.command == "build-features":
+                logger.info("Executing CLI command: data build-features")
+                from src.data.offline_provider import OfflineDataProvider
+                provider = OfflineDataProvider()
+                raw_df = provider.generate_synthetic_ohlcv(symbol="EURUSD", num_bars=1000)
+                pipe = FeatureEngineeringPipeline()
+                feats = pipe.build_feature_matrix(raw_df)
+                pipe.save_feature_store(feats)
+
+        elif args.group == "regime":
+            if args.command == "train":
+                logger.info("Executing CLI command: regime train")
+                from src.data.offline_provider import OfflineDataProvider
+                provider = OfflineDataProvider()
+                df = provider.generate_synthetic_ohlcv(symbol="EURUSD", num_bars=1000)
+                model = MarketRegimeHMM(n_components=4)
+                model.fit(df)
+                model.save_model("models/regime_hmm.pkl")
+
+        elif args.group == "causal":
+            if args.command == "discover":
+                logger.info("Executing CLI command: causal discover")
+                from src.data.pipeline import DataPipelineManager
+                from src.data.offline_provider import OfflineDataProvider
+                provider = OfflineDataProvider()
+                pipeline = DataPipelineManager(download_version="v1.0.0")
+                eur_raw = provider.generate_synthetic_ohlcv("EURUSD", 500)
+                gbp_raw = provider.generate_synthetic_ohlcv("GBPUSD", 500)
+                eur_f = pipeline.save_raw_parquet(pipeline.build_canonical_dataframe(eur_raw, "EURUSD", "EURUSD"), "EURUSD")
+                gbp_f = pipeline.save_raw_parquet(pipeline.build_canonical_dataframe(gbp_raw, "GBPUSD", "GBPUSD"), "GBPUSD")
+                aligned_df, _ = pipeline.create_aligned_dataset({"EURUSD": eur_f, "GBPUSD": gbp_f}, "EURUSD")
+                
+                discoverer = CausalGraphDiscoverer(tau_max=4)
+                res = discoverer.run_pcmci(aligned_df)
+                discoverer.export_causal_reports(res)
 
         elif args.group == "risk":
             if args.command == "verify":

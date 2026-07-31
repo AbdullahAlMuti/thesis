@@ -1,53 +1,123 @@
 {
   "dataset_version": "v1.0.0",
-  "created_at_utc": "2026-07-31T23:30:31.882561+00:00",
+  "created_at_utc": "2026-07-31T23:39:21.521974+00:00",
   "primary_target": "EURUSD",
-  "symbol_count": 6,
-  "total_rows": 6000,
-  "git_commit_hash": "75c5924dba9672f5c3ac770b54d83a48c492e85d",
+  "symbol_count": 16,
+  "total_rows": 16000,
+  "git_commit_hash": "efda9af5f178d0070e893651a7d991e073b24b9d",
   "python_version": "3.13.4",
   "symbols_summary": {
     "EURUSD": {
       "file_path": "data\\raw\\mt5\\h4\\EURUSD\\v1.0.0\\bars.parquet",
       "row_count": 1000,
-      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
-      "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "12326b27cd59adb360bf3db0ce3134eea421cb07bb444947715329562f50555b"
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "52aa756625844c0654c1ab5706859d8bff7db6f16512a42cb58c0f89f3f93a7f"
     },
     "GBPUSD": {
       "file_path": "data\\raw\\mt5\\h4\\GBPUSD\\v1.0.0\\bars.parquet",
       "row_count": 1000,
-      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
-      "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "b415ad4b535c749b5c4c7a76d77cdc339a8cfe1b9b4d8127a781c4a19455a23c"
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "d18624c22c4d9eb252d3730e02c33ffeb2199651b8fc572cd81507534ce24e54"
     },
     "USDJPY": {
       "file_path": "data\\raw\\mt5\\h4\\USDJPY\\v1.0.0\\bars.parquet",
       "row_count": 1000,
-      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
-      "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "74c4c6476ed73689cc1a641ee2a0ea2facdf5b771c0e7339bcfb2948cf5ae468"
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "6730e59d76610cc2c0bf878d9899a23d3ff07398d7da5d92ffca8e0acd737d75"
     },
     "USDCHF": {
       "file_path": "data\\raw\\mt5\\h4\\USDCHF\\v1.0.0\\bars.parquet",
       "row_count": 1000,
-      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
-      "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "6a58496dff174daed05a7439e9cdb21593d40c3d1a03c0f46aafceb7561be885"
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "5891fa7eb3bc81e6349c70ea6e3085dbb37ad410b061ce34a85163a82654af00"
+    },
+    "AUDUSD": {
+      "file_path": "data\\raw\\mt5\\h4\\AUDUSD\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "354f572f18d0aa4f7a9001bed5a99315acfa16462f80ca982c8be93379e77bef"
+    },
+    "USDCAD": {
+      "file_path": "data\\raw\\mt5\\h4\\USDCAD\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "757e19544f811f1d9b17d225436b500e72522b1d7fa48fd20997ffb59e382268"
+    },
+    "EURGBP": {
+      "file_path": "data\\raw\\mt5\\h4\\EURGBP\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "0f86b599219a9705da696c852eee3d1c739dddb3c7c44c33aaa93e234407352c"
+    },
+    "EURJPY": {
+      "file_path": "data\\raw\\mt5\\h4\\EURJPY\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "37460ef5b416caa5d273443c674456f5a065a5ec4a6b6049d6ba1019a410ba59"
+    },
+    "EURCHF": {
+      "file_path": "data\\raw\\mt5\\h4\\EURCHF\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-08T16:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "5f8bad22f1323ef84a4a73ba7d2cbca5d9fa8da889d30f8f88649835ad20a45f"
     },
     "XAUUSD": {
       "file_path": "data\\raw\\mt5\\h4\\XAUUSD\\v1.0.0\\bars.parquet",
       "row_count": 1000,
-      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
-      "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "9fe03e96c3028adf6d5d765d9b7ae31a8f389cfeda8dda3590bcbb2d9548b0e6"
+      "first_timestamp_utc": "2025-12-04T20:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "515f7cb7771d2d38355ca3b6a7f85f22c72cd7eee392e8b04512f7225c254987"
     },
     "US500": {
       "file_path": "data\\raw\\mt5\\h4\\US500\\v1.0.0\\bars.parquet",
       "row_count": 1000,
-      "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
-      "last_timestamp_utc": "2023-06-16T12:00:00+00:00",
-      "sha256": "8d1e87542a726c06d930d9820494acd0f43fee4ecebcfcf7fed776fed9f6bd0d"
+      "first_timestamp_utc": "2025-12-05T04:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "d992d5d1b05872eac32d7aeaec9ef4558a629bcb5bd0b7efe7a1b783afbadb91"
+    },
+    "US100": {
+      "file_path": "data\\raw\\mt5\\h4\\US100\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-05T04:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "c38030456e24c02a5540902880c0081c7033ea6bc1b50f13890128a62eb0d10c"
+    },
+    "US30": {
+      "file_path": "data\\raw\\mt5\\h4\\US30\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-05T04:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "de35335f70563d969e08ea6610c681ffa39a0df192264a35f88655479666a090"
+    },
+    "GER40": {
+      "file_path": "data\\raw\\mt5\\h4\\GER40\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-11-28T20:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "4bf689d80b4de6c0c44d636e40fb9a81aefdb5002e2887ea274d3e7eda69a240"
+    },
+    "UK100": {
+      "file_path": "data\\raw\\mt5\\h4\\UK100\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-01T08:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "f4672a37bc92f00de61ff19581aaf1abb2be0773f625c3b432e35ac56043ca84"
+    },
+    "OIL": {
+      "file_path": "data\\raw\\mt5\\h4\\OIL\\v1.0.0\\bars.parquet",
+      "row_count": 1000,
+      "first_timestamp_utc": "2025-12-04T20:00:00+00:00",
+      "last_timestamp_utc": "2026-07-31T16:00:00+00:00",
+      "sha256": "2b6568099279d40677e06fedde77e6cb04959fe48e9903a9feba25bc9a0ef4f3"
     }
   }
 }

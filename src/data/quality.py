@@ -100,7 +100,10 @@ class DataQualityValidator:
         completed_df = df_copy[is_complete_mask].copy()
 
         close_times_completed = close_times[is_complete_mask]
-        latest_close_ts = close_times_completed.iloc[-1] if len(close_times_completed) > 0 else None
+        if hasattr(close_times_completed, "iloc"):
+            latest_close_ts = close_times_completed.iloc[-1] if len(close_times_completed) > 0 else None
+        else:
+            latest_close_ts = close_times_completed[-1] if len(close_times_completed) > 0 else None
         metrics = {
             "total_rows": len(df_copy),
             "completed_rows": len(completed_df),
