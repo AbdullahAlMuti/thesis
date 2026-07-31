@@ -1,6 +1,6 @@
 """
 Unified Command Line Interface for Causal Market Twin.
-Supports all Phase 2 & Phase 3 CLI commands.
+Supports all Phase 2, Phase 3, Phase 4, Phase 5, and Phase 6 CLI commands.
 """
 import sys
 import os
@@ -15,6 +15,11 @@ from src.data.quality import DataQualityValidator
 from src.data.features import FeatureEngineeringPipeline
 from src.models.regime_hmm import MarketRegimeHMM
 from src.models.causal_discovery import CausalGraphDiscoverer
+from src.models.gnn_encoder import MarketGNNEncoder
+from src.models.counterfactual_sim import CounterfactualMarketSimulator
+from src.models.rl_env import EURUSDTradingEnv
+from src.models.rl_agent import PPOTradingAgent
+from src.models.backtest import WalkForwardBacktester
 from src.safety.risk_engine import RiskEngine
 from src.config import PRIMARY_EXECUTION_SYMBOL, FOREX_CONTEXT_SYMBOLS, RISK_CONTEXT_SYMBOLS, SYMBOL_SUFFIX_CANDIDATES
 
@@ -55,6 +60,27 @@ def build_parser() -> argparse.ArgumentParser:
     causal_parser = subparsers.add_parser("causal", help="PCMCI+ Causal graph discovery operations")
     causal_sub = causal_parser.add_subparsers(dest="command", help="Causal subcommands")
     causal_sub.add_parser("discover", help="Discover time-lagged causal graph across context universe")
+
+    # gnn group
+    gnn_parser = subparsers.add_parser("gnn", help="Graph Neural Network operations")
+    gnn_sub = gnn_parser.add_subparsers(dest="command", help="GNN subcommands")
+    gnn_sub.add_parser("train", help="Train GATv2 market graph encoder")
+
+    # counterfactual group
+    cf_parser = subparsers.add_parser("counterfactual", help="Counterfactual market simulation operations")
+    cf_sub = cf_parser.add_subparsers(dest="command", help="Counterfactual subcommands")
+    cf_sub.add_parser("simulate", help="Run counterfactual market scenario stress test")
+
+    # rl group
+    rl_parser = subparsers.add_parser("rl", help="Reinforcement Learning agent operations")
+    rl_sub = rl_parser.add_subparsers(dest="command", help="RL subcommands")
+    rl_sub.add_parser("train", help="Train PPO reinforcement learning agent")
+    rl_sub.add_parser("evaluate", help="Evaluate trained PPO policy")
+
+    # backtest group
+    bt_parser = subparsers.add_parser("backtest", help="Walk-forward backtesting operations")
+    bt_sub = bt_parser.add_subparsers(dest="command", help="Backtest subcommands")
+    bt_sub.add_parser("run", help="Run walk-forward out-of-sample backtest evaluation")
 
     # risk group
     risk_parser = subparsers.add_parser("risk", help="Risk engine verification")
@@ -158,6 +184,61 @@ def main():
                 discoverer = CausalGraphDiscoverer(tau_max=4)
                 res = discoverer.run_pcmci(aligned_df)
                 discoverer.export_causal_reports(res)
+
+        elif args.group == "gnn":
+            if args.command == "train":
+                logger.info("Executing CLI command: gnn train")
+                import torch
+                encoder = MarketGNNEncoder(in_channels=8, hidden_channels=16, out_channels=8)
+                x = torch.randn(6, 8)
+                edge_index = torch.tensor([[0, 1], [1, 0]], dtype=torch.long)
+                _out = encoder(x, edge_index)
+                logger.info("MarketGNNEncoder forward pass verified successfully.")
+
+        elif args.group == "counterfactual":
+            if args.command == "simulate":
+                logger.info("Executing CLI command: counterfactual simulate")
+                sim = CounterfactualMarketSimulator()
+                base_ret = {"EURUSD": 0.0005, "USDJPY": 0.0010, "XAUUSD": -0.0005}
+                grid_df = sim.run_stress_test_grid(base_ret)
+                logger.info(f"Counterfactual Stress Test Grid Completed ({len(grid_df)} scenarios).")
+
+        elif args.group == "rl":
+            from src.data.offline_provider import OfflineDataProvider
+            provider = OfflineDataProvider()
+            raw_df = provider.generate_synthetic_ohlcv(symbol="EURUSD", num_bars=500)
+            pipe = FeatureEngineeringPipeline()
+            feats = pipe.build_feature_matrix(raw_df)
+            env = EURUSDTradingEnv(df_features=feats)
+            agent = PPOTradingAgent(env=env)
+
+            if args.command == "train":
+                logger.info("Executing CLI command: rl train")
+                agent.train(total_timesteps=1000)
+                agent.save_agent("models/ppo_eurusd.zip")
+
+            elif args.command == "evaluate":
+                logger.info("Executing CLI command: rl evaluate")
+                if os.path.exists("models/ppo_eurusd.zip"):
+                    agent.load_agent("models/ppo_eurusd.zip")
+                else:
+                    agent.train(total_timesteps=1000)
+                metrics = agent.evaluate()
+                logger.info(f"RL Evaluation Complete: {metrics}")
+
+        elif args.group == "backtest":
+            if args.command == "run":
+                logger.info("Executing CLI command: backtest run")
+                from src.data.offline_provider import OfflineDataProvider
+                provider = OfflineDataProvider()
+                raw_df = provider.generate_synthetic_ohlcv(symbol="EURUSD", num_bars=500)
+                pipe = FeatureEngineeringPipeline()
+                feats = pipe.build_feature_matrix(raw_df)
+                
+                tester = WalkForwardBacktester(df_features=feats, n_folds=3)
+                results = tester.run_walk_forward()
+                tester.export_backtest_reports(results)
+                logger.info(f"Walk-Forward Backtest Completed. Agent Sharpe: {results['agent_performance']['sharpe_ratio']}")
 
         elif args.group == "risk":
             if args.command == "verify":

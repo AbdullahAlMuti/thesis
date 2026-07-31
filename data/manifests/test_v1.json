@@ -1,10 +1,10 @@
 {
   "dataset_version": "test_v1",
-  "created_at_utc": "2026-07-31T23:39:14.064669+00:00",
+  "created_at_utc": "2026-07-31T23:44:00.573524+00:00",
   "primary_target": "EURUSD",
   "symbol_count": 1,
   "total_rows": 50,
-  "git_commit_hash": "efda9af5f178d0070e893651a7d991e073b24b9d",
+  "git_commit_hash": "fb0f76541307e159ae0972b51d3798e6064efef7",
   "python_version": "3.13.4",
   "symbols_summary": {
     "EURUSD": {
@@ -12,7 +12,7 @@
       "row_count": 50,
       "first_timestamp_utc": "2023-01-01T00:00:00+00:00",
       "last_timestamp_utc": "2023-01-09T04:00:00+00:00",
-      "sha256": "4902b4a687e1978aa44d0eb3272748bda096e35690b4b8834493f8d6513b5f21"
+      "sha256": "2efa819dd4c825b679eed9a92ca3124459ac354f93dcdee1b4f53150f1841605"
     }
   }
 }

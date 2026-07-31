@@ -13,6 +13,8 @@ from src.data.symbol_discovery import SymbolResolver
 from src.data.offline_provider import OfflineDataProvider
 from src.models.regime_hmm import MarketRegimeHMM, REGIME_NAMES
 from src.data.features import FeatureEngineeringPipeline
+from src.models.counterfactual_sim import CounterfactualMarketSimulator
+from src.dashboard.alert_engine import DecisionAlertEngine
 from src.safety.risk_engine import RiskEngine
 from src.config import PRIMARY_EXECUTION_SYMBOL, PRIMARY_TIMEFRAME
 
@@ -44,7 +46,7 @@ st.markdown("""
 
 # Page Header
 st.markdown('<div class="main-header">Agentic Causal Digital Twin for EURUSD</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">Regime-Aware Counterfactual Graph Learning & Decision Support for XM MetaTrader 5</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Regime-Aware Counterfactual Graph Learning & Multi-Objective RL Decision Support</div>', unsafe_allow_html=True)
 
 # Sidebar System Status
 st.sidebar.image("https://img.icons8.com/color/96/000000/line-chart.png", width=64)
@@ -108,13 +110,18 @@ with col4:
 st.markdown("---")
 
 # Tab Layout
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Decision Support & Charts", "🧠 Market Regimes & Causal Graph", "⚙️ Interactive Risk Calculator", "🔍 Data Quality & Manifest Inspector"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "📊 Decision Support & Signals",
+    "🧠 Market Regimes & Causal Graph",
+    "🔮 Counterfactual What-If Simulator",
+    "📈 Walk-Forward Backtest Performance",
+    "⚙️ Interactive Risk Calculator"
+])
 
 with tab1:
     c1, c2 = st.columns([2, 1])
-
     with c1:
-        st.subheader("EURUSD H4 Price History & Feature Trends")
+        st.subheader("EURUSD H4 Price History & Technical Trend")
         st.line_chart(df_feats[["eurusd_close", "rsi_14"]].tail(200))
         st.caption(f"Last Completed Bar: {latest_time.strftime('%Y-%m-%d %H:%M:%S UTC')} | Completed Candles Only (No Lookahead)")
 
@@ -132,7 +139,6 @@ with tab1:
 
 with tab2:
     st.subheader("Gaussian HMM Market Regime Probabilities & Causal Graph")
-    
     col_reg1, col_reg2 = st.columns(2)
     with col_reg1:
         st.markdown("### Regime Posterior Probabilities")
@@ -150,8 +156,51 @@ with tab2:
             st.warning("Causal network plot not found. Run `causal-market-twin causal discover` to generate.")
 
 with tab3:
-    st.subheader("Interactive XM Risk Engine Position Sizer")
+    st.subheader("Counterfactual 'What-If' Market Scenario Simulator")
+    st.markdown("Simulate market interventions $do(X_j = x_j')$ across context instruments to evaluate predicted EURUSD price impact:")
     
+    sim = CounterfactualMarketSimulator()
+    c_col1, c_col2 = st.columns(2)
+    with c_col1:
+        jpy_shock = st.slider("USDJPY Shock (%)", min_value=-3.0, max_value=3.0, value=1.0, step=0.1) / 100.0
+        gold_shock = st.slider("Gold (XAUUSD) Shock (%)", min_value=-3.0, max_value=3.0, value=-1.5, step=0.1) / 100.0
+    with c_col2:
+        spx_shock = st.slider("S&P 500 (US500) Shock (%)", min_value=-3.0, max_value=3.0, value=-2.0, step=0.1) / 100.0
+
+    interventions = {"USDJPY": jpy_shock, "XAUUSD": gold_shock, "US500": spx_shock}
+    base_ret = {"EURUSD": ret_1b, "USDJPY": 0.0, "XAUUSD": 0.0, "US500": 0.0}
+    sim_res = sim.simulate_intervention(base_ret, interventions)
+
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Base EURUSD Return", f"{sim_res['base_eurusd_return']*100:.3f}%")
+    m2.metric("Counterfactual EURUSD Return", f"{sim_res['counterfactual_eurusd_return']*100:.3f}%", delta=f"{sim_res['total_causal_impact']*100:.3f}% Impact")
+    m3.metric("Stress Level", "MODERATE" if abs(sim_res['total_causal_impact']) < 0.005 else "HIGH")
+
+with tab4:
+    st.subheader("Walk-Forward Out-of-Sample Performance Benchmarks")
+    bt_path = "artifacts/reports/backtest_results.json"
+    plot_path_bt = "artifacts/reports/plots/equity_curves.png"
+
+    if os.path.exists(bt_path):
+        with open(bt_path, "r", encoding="utf-8") as f:
+            bt_data = json.load(f)
+        
+        b1, b2, b3, b4 = st.columns(4)
+        agent_p = bt_data.get("agent_performance", {})
+        bnh_p = bt_data.get("buy_and_hold_performance", {})
+
+        b1.metric("Agent Sharpe Ratio", f"{agent_p.get('sharpe_ratio', 0.0):.2f}", delta=f"vs B&H {bnh_p.get('sharpe_ratio', 0.0):.2f}")
+        b2.metric("Max Drawdown %", f"{agent_p.get('max_drawdown_pct', 0.0):.2f}%", delta=f"vs B&H {bnh_p.get('max_drawdown_pct', 0.0):.2f}%", delta_color="inverse")
+        b3.metric("Profit Factor", f"{agent_p.get('profit_factor', 0.0):.2f}")
+        b4.metric("Win Rate %", f"{agent_p.get('win_rate_pct', 0.0):.1f}%")
+
+        if os.path.exists(plot_path_bt):
+            st.image(plot_path_bt, caption="Walk-Forward Out-of-Sample Equity Curves")
+    else:
+        st.info("Run `causal-market-twin backtest run` to generate walk-forward backtest results.")
+
+with tab5:
+    st.subheader("Interactive XM Risk Engine Position Sizer")
     col_a, col_b = st.columns(2)
     with col_a:
         action_val = st.slider("Continuous Model Action [-1.0 to +1.0]", min_value=-1.0, max_value=1.0, value=0.5, step=0.05)
@@ -185,14 +234,6 @@ with tab3:
         st.error(f"⚠️ Proposal Rejected: {proposal.rejection_reason}")
     else:
         st.success("✅ Valid XM Lot Proposal (Complies with volume_step 0.01 and margin checks)")
-
-with tab4:
-    st.subheader("Dataset Manifest & Feature Store Inspector")
-    manifest_path = "data/manifests/v1.0.0.json"
-    if os.path.exists(manifest_path):
-        with open(manifest_path, "r", encoding="utf-8") as f:
-            manifest_data = json.load(f)
-        st.json(manifest_data)
 
 st.markdown("---")
 st.caption("Agentic Causal Digital Twin for EURUSD | Powered by MetaTrader 5 & XM Broker")
