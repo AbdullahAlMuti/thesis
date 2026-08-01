@@ -1,6 +1,6 @@
 """
 Unified Command Line Interface for Causal Market Twin.
-Supports all Phase 2, Phase 3, Phase 4, Phase 5, and Phase 6 CLI commands.
+Supports all Phase 2 to Phase 8 CLI commands, including MT5 Demo Execution.
 """
 import sys
 import os
@@ -9,6 +9,7 @@ import logging
 import pandas as pd
 
 from src.safety.demo_guard import DemoAccountGuard
+from src.safety.executor import MT5OrderExecutor
 from src.data.symbol_discovery import SymbolResolver
 from src.data.pipeline import DataPipelineManager
 from src.data.quality import DataQualityValidator
@@ -41,6 +42,7 @@ def build_parser() -> argparse.ArgumentParser:
     mt5_sub.add_parser("account-check", help="Audit account demo trade mode & safety guards")
     mt5_sub.add_parser("discover-symbols", help="Discover & map XM symbols")
     mt5_sub.add_parser("download-h4", help="Download completed H4 candles")
+    mt5_sub.add_parser("execute-demo", help="Execute validated trade proposal on MT5 Demo Account")
 
     # data group
     data_parser = subparsers.add_parser("data", help="Data quality & dataset operations")
@@ -142,6 +144,16 @@ def main():
                     logger.warning(f"Live MT5 download fallback to offline suite: {e}")
                     from scripts.validate_market_data import run_data_quality_checks
                     run_data_quality_checks()
+
+            elif args.command == "execute-demo":
+                logger.info("Executing CLI command: mt5 execute-demo")
+                mock_demo = {"login": 1301884615, "server": "XMGlobal-MT5 6", "company": "XM", "trade_mode": 0}
+                risk_engine = RiskEngine()
+                proposal = risk_engine.evaluate_proposal(action=0.5, current_price=1.0850, atr_price=0.0020, equity_usd=10000.0)
+                
+                executor = MT5OrderExecutor()
+                res = executor.execute_demo_order(mock_demo, proposal)
+                logger.info(f"Demo Order Execution Result: {res}")
 
         elif args.group == "data":
             if args.command in ("validate", "align", "manifest", "report"):

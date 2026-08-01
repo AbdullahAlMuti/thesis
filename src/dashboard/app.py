@@ -29,56 +29,13 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (Sidebar Fully Enabled & Deploy Button Specifically Hidden)
+# Custom AIUB Official Color Theme CSS (All Banner Text Forced WHITE #FFFFFF)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Outfit', sans-serif;
-    }
-    
-    /* Target ONLY Deploy button & footer - DO NOT hide header container so sidebar toggle works */
-    div[data-testid="stAppDeployButton"], 
-    .stAppDeployButton, 
-    div[data-testid="stDeployButton"], 
-    .stDeployButton,
-    button[kind="header"][aria-label*="Deploy"],
-    #MainMenu, 
-    footer {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        width: 0px !important;
-        height: 0px !important;
-    }
-    
-    /* Transparent header background to preserve sidebar collapse/expand toggle */
-    [data-testid="stHeader"], header {
-        background-color: transparent !important;
-    }
-    
-    /* Force Sidebar to be fully visible & interactive with 100% Crisp White Text */
-    section[data-testid="stSidebar"], [data-testid="stSidebar"] {
-        display: block !important;
-        visibility: visible !important;
-        background: linear-gradient(180deg, #001F3F 0%, #001122 100%) !important;
-    }
-    
-    section[data-testid="stSidebar"] *, [data-testid="stSidebar"] * {
-        color: #FFFFFF !important;
-    }
-    
-    [data-testid="stSidebar"] code {
-        color: #FDB813 !important;
-        background-color: rgba(255,255,255,0.12) !important;
-        padding: 2px 6px !important;
-        border-radius: 4px !important;
-    }
-    
-    .block-container {
-        padding-top: 1rem !important;
     }
     
     /* Official AIUB University Header Banner */
@@ -147,7 +104,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# AIUB Official Header Banner (Author Name Removed)
+# AIUB Official Header Banner with 100% White Text (#FFFFFF)
 st.markdown(f"""
 <div class="aiub-header-container">
     <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -161,6 +118,7 @@ st.markdown(f"""
                 <h1 class="aiub-title">American International University - Bangladesh</h1>
                 <h3 class="aiub-subtitle">Agentic Causal Digital Twin for EURUSD: Regime-Aware Counterfactual Graph Learning & MORL</h3>
                 <div class="aiub-meta">
+                    <b>Author</b>: Abdullah Al Muti &nbsp;|&nbsp; 
                     <b>Department</b>: Computer Science & Engineering &nbsp;|&nbsp; 
                     <b>Target</b>: EURUSD H4
                 </div>

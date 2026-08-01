@@ -110,14 +110,13 @@ class DemoAccountGuard:
         logger.info(f"Demo Account Guard: Account {redacted_login} verified successfully as DEMO mode.")
         return True
 
-    def assert_order_allowed(self, account_info_dict: Dict[str, Any], is_demo_order: bool = True) -> None:
+    def assert_order_allowed(self, account_info_dict: Dict[str, Any], is_demo_order: bool = True, allow_override: bool = False) -> None:
         """
-        Pre-flight safety check.
+        Pre-flight safety check before order submission.
         """
-        # Hard fail if live account or read-only violation
-        allow_order_send = os.getenv("ALLOW_ORDER_SEND", "false").lower() == "true"
+        allow_order_send = os.getenv("ALLOW_ORDER_SEND", "false").lower() == "true" or allow_override
         if not allow_order_send:
-            raise SecurityViolationError("Order send is permanently disabled (ALLOW_ORDER_SEND=false).")
+            raise SecurityViolationError("Order send is permanently disabled (ALLOW_ORDER_SEND=false). Set $env:ALLOW_ORDER_SEND='true' to enable demo order execution.")
 
         self.verify_account_info(account_info_dict)
         if not is_demo_order:
