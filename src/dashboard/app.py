@@ -26,6 +26,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# AIUB Official SVG Logo URL & Inline SVG helper
+AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
+
 # Custom AIUB Branding CSS (Navy Blue #002147 & Gold #FDB813)
 st.markdown("""
 <style>
@@ -73,27 +76,38 @@ st.markdown("""
         display: inline-block;
         margin-right: 8px;
     }
+    .logo-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(253,184,19,0.5);
+        background-color: white;
+        padding: 5px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# AIUB Official Header Banner
-st.markdown("""
+# AIUB Official Header Banner with Official Logo
+st.markdown(f"""
 <div class="aiub-header-container">
     <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <img src="{AIUB_LOGO_URL}" class="logo-img" alt="AIUB Logo" />
             <div>
-                <span class="aiub-badge">AIUB Thesis Presentation</span>
-                <span class="aiub-badge" style="background-color: #0070F3; color: white;">XM MT5 Demo Support</span>
-            </div>
-            <h1 class="aiub-title">American International University - Bangladesh</h1>
-            <h3 class="aiub-subtitle">Agentic Causal Digital Twin for EURUSD: Regime-Aware Counterfactual Graph Learning & MORL</h3>
-            <div class="aiub-meta">
-                <b>Author</b>: Abdullah Al Muti &nbsp;|&nbsp; 
-                <b>Institution</b>: AIUB Department of Computer Science & Engineering &nbsp;|&nbsp; 
-                <b>Target</b>: EURUSD H4
+                <div>
+                    <span class="aiub-badge">AIUB Thesis Presentation</span>
+                    <span class="aiub-badge" style="background-color: #0070F3; color: white;">XM MT5 Demo Support</span>
+                </div>
+                <h1 class="aiub-title">American International University - Bangladesh</h1>
+                <h3 class="aiub-subtitle">Agentic Causal Digital Twin for EURUSD: Regime-Aware Counterfactual Graph Learning & MORL</h3>
+                <div class="aiub-meta">
+                    <b>Author</b>: Abdullah Al Muti &nbsp;|&nbsp; 
+                    <b>Institution</b>: AIUB Department of Computer Science & Engineering &nbsp;|&nbsp; 
+                    <b>Target</b>: EURUSD H4
+                </div>
             </div>
         </div>
-        <div style="text-align: right; background: rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(253,184,19,0.3);">
+        <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(253,184,19,0.3);">
             <div style="font-size: 1.8rem; font-weight: 800; color: #FDB813;">AIUB</div>
             <div style="font-size: 0.75rem; color: #E2E8F0; text-transform: uppercase; letter-spacing: 1px;">Where Leaders Are Created</div>
         </div>
@@ -101,9 +115,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Sidebar System Control
-st.sidebar.markdown("""
-<div style="text-align: center; padding: 10px; background-color: #001F3F; border-radius: 8px; border: 1px solid #FDB813; margin-bottom: 15px;">
+# Sidebar System Control with Official Logo
+st.sidebar.markdown(f"""
+<div style="text-align: center; padding: 15px; background-color: #001F3F; border-radius: 8px; border: 1px solid #FDB813; margin-bottom: 15px;">
+    <img src="{AIUB_LOGO_URL}" style="width: 60px; height: 60px; background: white; border-radius: 50%; padding: 3px; margin-bottom: 8px;" alt="AIUB Logo"/>
     <h3 style="color: #FDB813; margin:0;">AIUB Thesis</h3>
     <p style="color: #E2E8F0; font-size: 0.8rem; margin:0;">Digital Twin Control Panel</p>
 </div>
@@ -240,7 +255,7 @@ with tab_cf:
     c_col1, c_col2 = st.columns(2)
     with c_col1:
         jpy_shock = st.slider("USDJPY Shock (%)", min_value=-3.0, max_value=3.0, value=1.0, step=0.1) / 100.0
-        gold_shock = st.slider("Gold (XAUUSD) Shock (%)", min_value=-3.0, max_value=-1.5, value=-1.5, step=0.1) / 100.0
+        gold_shock = st.slider("Gold (XAUUSD) Shock (%)", min_value=-3.0, max_value=3.0, value=-1.5, step=0.1) / 100.0
     with c_col2:
         spx_shock = st.slider("S&P 500 (US500) Shock (%)", min_value=-3.0, max_value=3.0, value=-2.0, step=0.1) / 100.0
 
