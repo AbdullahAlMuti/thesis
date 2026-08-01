@@ -29,7 +29,7 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (Completely Hides Top-Right Deploy Link)
+# Custom AIUB Official Color Theme CSS (Sidebar Fully Enabled & Deploy Button Specifically Hidden)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
@@ -38,30 +38,28 @@ st.markdown("""
         font-family: 'Outfit', sans-serif;
     }
     
-    /* Completely Delete & Hide Streamlit Top-Right Deploy Link and Toolbar */
-    .stAppDeployButton,
-    [data-testid="stAppDeployButton"],
-    div[data-testid="stDeployButton"],
+    /* Target ONLY Deploy button & footer - DO NOT hide header container so sidebar toggle works */
+    div[data-testid="stAppDeployButton"], 
+    .stAppDeployButton, 
+    div[data-testid="stDeployButton"], 
     .stDeployButton,
-    [data-testid="stHeader"],
-    header[data-testid="stHeader"],
-    header,
-    #MainMenu,
-    footer,
-    [data-testid="stToolbar"],
-    .stAppHeader {
+    button[kind="header"][aria-label*="Deploy"],
+    #MainMenu, 
+    footer {
         display: none !important;
-        opacity: 0 !important;
         visibility: hidden !important;
+        opacity: 0 !important;
         pointer-events: none !important;
         width: 0px !important;
         height: 0px !important;
-        position: absolute !important;
-        top: -9999px !important;
-        left: -9999px !important;
     }
     
-    /* Force Sidebar to be fully visible & styled with 100% Crisp White Text */
+    /* Transparent header background to preserve sidebar collapse/expand toggle */
+    [data-testid="stHeader"], header {
+        background-color: transparent !important;
+    }
+    
+    /* Force Sidebar to be fully visible & interactive with 100% Crisp White Text */
     section[data-testid="stSidebar"], [data-testid="stSidebar"] {
         display: block !important;
         visibility: visible !important;
