@@ -29,7 +29,7 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (All Deploy Buttons & Streamlit Headers Hdden)
+# Custom AIUB Official Color Theme CSS (Author Name Removed)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
@@ -123,7 +123,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# AIUB Official Header Banner with 100% White Text (#FFFFFF)
+# AIUB Official Header Banner (Author Name Removed)
 st.markdown(f"""
 <div class="aiub-header-container">
     <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -137,7 +137,6 @@ st.markdown(f"""
                 <h1 class="aiub-title">American International University - Bangladesh</h1>
                 <h3 class="aiub-subtitle">Agentic Causal Digital Twin for EURUSD: Regime-Aware Counterfactual Graph Learning & MORL</h3>
                 <div class="aiub-meta">
-                    <b>Author</b>: Abdullah Al Muti &nbsp;|&nbsp; 
                     <b>Department</b>: Computer Science & Engineering &nbsp;|&nbsp; 
                     <b>Target</b>: EURUSD H4
                 </div>
