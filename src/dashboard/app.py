@@ -29,7 +29,7 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (AIUB Blue #034EA1, Sky Blue #B8E4FA, Gold #FDB813)
+# Custom AIUB Official Color Theme CSS (All Banner Text Forced WHITE #FFFFFF)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
@@ -46,26 +46,31 @@ st.markdown("""
         padding: 26px 32px;
         margin-bottom: 25px;
         box-shadow: 0 12px 30px rgba(3, 78, 161, 0.3);
+        color: #FFFFFF !important;
     }
     .aiub-title {
         font-size: 2.2rem;
         font-weight: 800;
-        color: #FFFFFF;
+        color: #FFFFFF !important;
         margin: 0;
         letter-spacing: -0.5px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.4);
     }
     .aiub-subtitle {
         font-size: 1.15rem;
         font-weight: 700;
-        color: #B8E4FA;
+        color: #FFFFFF !important;
         margin-top: 6px;
         margin-bottom: 0px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
     .aiub-meta {
         font-size: 0.92rem;
-        color: #E2E8F0;
+        color: #FFFFFF !important;
         margin-top: 10px;
+    }
+    .aiub-meta b {
+        color: #FFFFFF !important;
     }
     .aiub-badge {
         background-color: #FDB813;
@@ -79,7 +84,7 @@ st.markdown("""
         margin-right: 8px;
     }
     .aiub-badge-alt {
-        background-color: #B8E4FA;
+        background-color: #FFFFFF;
         color: #034EA1;
         padding: 4px 12px;
         border-radius: 6px;
@@ -92,14 +97,14 @@ st.markdown("""
         width: 96px;
         height: 96px;
         border-radius: 50%;
-        box-shadow: 0 0 20px rgba(184, 228, 250, 0.6);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
         background-color: white;
         padding: 6px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# AIUB Official Header Banner with Official Colors (#034EA1 Blue & #B8E4FA Sky Blue)
+# AIUB Official Header Banner with 100% White Text (#FFFFFF)
 st.markdown(f"""
 <div class="aiub-header-container">
     <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -119,9 +124,9 @@ st.markdown(f"""
                 </div>
             </div>
         </div>
-        <div style="text-align: right; background: rgba(255,255,255,0.12); padding: 16px 22px; border-radius: 12px; border: 1px solid rgba(184,228,250,0.4);">
+        <div style="text-align: right; background: rgba(255,255,255,0.15); padding: 16px 22px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.4);">
             <div style="font-size: 1.9rem; font-weight: 800; color: #FFFFFF; letter-spacing: 1px;">AIUB</div>
-            <div style="font-size: 0.78rem; color: #FDB813; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Where Leaders Are Created</div>
+            <div style="font-size: 0.78rem; color: #FFFFFF; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Where Leaders Are Created</div>
         </div>
     </div>
 </div>
@@ -132,7 +137,7 @@ st.sidebar.markdown(f"""
 <div style="text-align: center; padding: 15px; background: linear-gradient(180deg, #034EA1 0%, #002B5C 100%); border-radius: 10px; border-top: 4px solid #FDB813; margin-bottom: 15px;">
     <img src="{AIUB_LOGO_URL}" style="width: 64px; height: 64px; background: white; border-radius: 50%; padding: 4px; margin-bottom: 8px;" alt="AIUB Logo"/>
     <h3 style="color: #FFFFFF; margin:0; font-weight: 800;">AIUB Thesis</h3>
-    <p style="color: #B8E4FA; font-size: 0.8rem; margin:0; font-weight: 600;">Digital Twin Control Panel</p>
+    <p style="color: #FFFFFF; font-size: 0.8rem; margin:0; font-weight: 600;">Digital Twin Control Panel</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -340,4 +345,4 @@ with tab_risk:
         st.success("✅ Valid XM Lot Proposal (Complies with volume_step 0.01 and margin checks)")
 
 st.markdown("---")
-st.markdown("<div style='text-align: center; color: #718096; font-size: 0.85rem;'>American International University - Bangladesh (AIUB) Thesis Presentation | EURUSD Causal Digital Twin</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; color: #FFFFFF; font-size: 0.85rem;'>American International University - Bangladesh (AIUB) Thesis Presentation | EURUSD Causal Digital Twin</div>", unsafe_allow_html=True)
