@@ -29,7 +29,7 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (Sidebar Explicitly Enabled & Visible)
+# Custom AIUB Official Color Theme CSS (Sidebar Text Forced 100% WHITE #FFFFFF)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
@@ -44,11 +44,22 @@ st.markdown("""
         visibility: hidden !important;
     }
     
-    /* Force Sidebar to be fully visible & styled */
+    /* Force Sidebar to be fully visible & styled with 100% Crisp White Text */
     section[data-testid="stSidebar"], [data-testid="stSidebar"] {
         display: block !important;
         visibility: visible !important;
         background: linear-gradient(180deg, #001F3F 0%, #001122 100%) !important;
+    }
+    
+    section[data-testid="stSidebar"] *, [data-testid="stSidebar"] * {
+        color: #FFFFFF !important;
+    }
+    
+    [data-testid="stSidebar"] code {
+        color: #FDB813 !important;
+        background-color: rgba(255,255,255,0.12) !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
     }
     
     .block-container {
