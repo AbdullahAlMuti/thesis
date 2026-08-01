@@ -29,7 +29,7 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (Sidebar Text Forced 100% WHITE #FFFFFF)
+# Custom AIUB Official Color Theme CSS (Completely Hides Top-Right Deploy Link)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
@@ -38,10 +38,27 @@ st.markdown("""
         font-family: 'Outfit', sans-serif;
     }
     
-    /* Hide Only Deploy Button & Footer - Preserve Sidebar */
-    div[data-testid="stDeployButton"], .stDeployButton, #MainMenu, footer {
+    /* Completely Delete & Hide Streamlit Top-Right Deploy Link and Toolbar */
+    .stAppDeployButton,
+    [data-testid="stAppDeployButton"],
+    div[data-testid="stDeployButton"],
+    .stDeployButton,
+    [data-testid="stHeader"],
+    header[data-testid="stHeader"],
+    header,
+    #MainMenu,
+    footer,
+    [data-testid="stToolbar"],
+    .stAppHeader {
         display: none !important;
+        opacity: 0 !important;
         visibility: hidden !important;
+        pointer-events: none !important;
+        width: 0px !important;
+        height: 0px !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
     }
     
     /* Force Sidebar to be fully visible & styled with 100% Crisp White Text */
@@ -63,7 +80,7 @@ st.markdown("""
     }
     
     .block-container {
-        padding-top: 1.5rem !important;
+        padding-top: 1rem !important;
     }
     
     /* Official AIUB University Header Banner */
