@@ -26,10 +26,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# AIUB Official SVG Logo URL & Inline SVG helper
+# Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Branding CSS (Navy Blue #002147 & Gold #FDB813)
+# Custom AIUB Official Color Theme CSS (AIUB Blue #034EA1, Sky Blue #B8E4FA, Gold #FDB813)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
@@ -38,13 +38,14 @@ st.markdown("""
         font-family: 'Outfit', sans-serif;
     }
     
+    /* Official AIUB University Header Banner */
     .aiub-header-container {
-        background: linear-gradient(135deg, #001F3F 0%, #003366 50%, #001122 100%);
-        border-bottom: 4px solid #FDB813;
-        border-radius: 12px;
-        padding: 24px 30px;
+        background: linear-gradient(135deg, #034EA1 0%, #002B5C 60%, #001A38 100%);
+        border-bottom: 5px solid #FDB813;
+        border-radius: 14px;
+        padding: 26px 32px;
         margin-bottom: 25px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        box-shadow: 0 12px 30px rgba(3, 78, 161, 0.3);
     }
     .aiub-title {
         font-size: 2.2rem;
@@ -52,75 +53,86 @@ st.markdown("""
         color: #FFFFFF;
         margin: 0;
         letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .aiub-subtitle {
         font-size: 1.15rem;
-        font-weight: 600;
-        color: #FDB813;
+        font-weight: 700;
+        color: #B8E4FA;
         margin-top: 6px;
         margin-bottom: 0px;
     }
     .aiub-meta {
-        font-size: 0.9rem;
-        color: #CBD5E0;
+        font-size: 0.92rem;
+        color: #E2E8F0;
         margin-top: 10px;
     }
     .aiub-badge {
         background-color: #FDB813;
-        color: #001F3F;
+        color: #034EA1;
         padding: 4px 12px;
         border-radius: 6px;
         font-size: 0.8rem;
-        font-weight: 700;
+        font-weight: 800;
         text-transform: uppercase;
         display: inline-block;
         margin-right: 8px;
     }
+    .aiub-badge-alt {
+        background-color: #B8E4FA;
+        color: #034EA1;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        display: inline-block;
+    }
     .logo-img {
-        width: 90px;
-        height: 90px;
+        width: 96px;
+        height: 96px;
         border-radius: 50%;
-        box-shadow: 0 0 15px rgba(253,184,19,0.5);
+        box-shadow: 0 0 20px rgba(184, 228, 250, 0.6);
         background-color: white;
-        padding: 5px;
+        padding: 6px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# AIUB Official Header Banner with Official Logo
+# AIUB Official Header Banner with Official Colors (#034EA1 Blue & #B8E4FA Sky Blue)
 st.markdown(f"""
 <div class="aiub-header-container">
     <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 24px;">
             <img src="{AIUB_LOGO_URL}" class="logo-img" alt="AIUB Logo" />
             <div>
                 <div>
                     <span class="aiub-badge">AIUB Thesis Presentation</span>
-                    <span class="aiub-badge" style="background-color: #0070F3; color: white;">XM MT5 Demo Support</span>
+                    <span class="aiub-badge-alt">XM MT5 Demo Support</span>
                 </div>
                 <h1 class="aiub-title">American International University - Bangladesh</h1>
                 <h3 class="aiub-subtitle">Agentic Causal Digital Twin for EURUSD: Regime-Aware Counterfactual Graph Learning & MORL</h3>
                 <div class="aiub-meta">
                     <b>Author</b>: Abdullah Al Muti &nbsp;|&nbsp; 
-                    <b>Institution</b>: AIUB Department of Computer Science & Engineering &nbsp;|&nbsp; 
+                    <b>Department</b>: Computer Science & Engineering &nbsp;|&nbsp; 
                     <b>Target</b>: EURUSD H4
                 </div>
             </div>
         </div>
-        <div style="text-align: right; background: rgba(255,255,255,0.08); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(253,184,19,0.3);">
-            <div style="font-size: 1.8rem; font-weight: 800; color: #FDB813;">AIUB</div>
-            <div style="font-size: 0.75rem; color: #E2E8F0; text-transform: uppercase; letter-spacing: 1px;">Where Leaders Are Created</div>
+        <div style="text-align: right; background: rgba(255,255,255,0.12); padding: 16px 22px; border-radius: 12px; border: 1px solid rgba(184,228,250,0.4);">
+            <div style="font-size: 1.9rem; font-weight: 800; color: #FFFFFF; letter-spacing: 1px;">AIUB</div>
+            <div style="font-size: 0.78rem; color: #FDB813; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Where Leaders Are Created</div>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Sidebar System Control with Official Logo
+# Sidebar System Control with Official AIUB Colors
 st.sidebar.markdown(f"""
-<div style="text-align: center; padding: 15px; background-color: #001F3F; border-radius: 8px; border: 1px solid #FDB813; margin-bottom: 15px;">
-    <img src="{AIUB_LOGO_URL}" style="width: 60px; height: 60px; background: white; border-radius: 50%; padding: 3px; margin-bottom: 8px;" alt="AIUB Logo"/>
-    <h3 style="color: #FDB813; margin:0;">AIUB Thesis</h3>
-    <p style="color: #E2E8F0; font-size: 0.8rem; margin:0;">Digital Twin Control Panel</p>
+<div style="text-align: center; padding: 15px; background: linear-gradient(180deg, #034EA1 0%, #002B5C 100%); border-radius: 10px; border-top: 4px solid #FDB813; margin-bottom: 15px;">
+    <img src="{AIUB_LOGO_URL}" style="width: 64px; height: 64px; background: white; border-radius: 50%; padding: 4px; margin-bottom: 8px;" alt="AIUB Logo"/>
+    <h3 style="color: #FFFFFF; margin:0; font-weight: 800;">AIUB Thesis</h3>
+    <p style="color: #B8E4FA; font-size: 0.8rem; margin:0; font-weight: 600;">Digital Twin Control Panel</p>
 </div>
 """, unsafe_allow_html=True)
 
