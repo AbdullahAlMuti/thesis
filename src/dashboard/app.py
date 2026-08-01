@@ -29,13 +29,19 @@ st.set_page_config(
 # Official AIUB Logo URL
 AIUB_LOGO_URL = "https://www.aiub.edu/Files/Templates/NewAIUB/assets/images/aiub-logo.svg"
 
-# Custom AIUB Official Color Theme CSS (All Banner Text Forced WHITE #FFFFFF)
+# Custom AIUB Official Color Theme CSS (Streamlit Deploy Button Hidden)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Outfit', sans-serif;
+    }
+    
+    /* Hide Streamlit Default Deploy Button */
+    div[data-testid="stDeployButton"], .stDeployButton, #MainMenu {
+        display: none !important;
+        visibility: hidden !important;
     }
     
     /* Official AIUB University Header Banner */
